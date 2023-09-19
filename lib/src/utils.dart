@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:package_info/package_info.dart';
 
 import '../app_flavor.dart';
@@ -20,6 +18,9 @@ class AppFlavorUtils {
   static AppFlavor _appFlavor = AppFlavor.development;
   static Map<AppFlavor, Map<String, dynamic>>? _variables;
   static AppFlavor get appFlavor => _appFlavor;
+
+  static String _packageName = "";
+  static String get packageName => _packageName;
 
   /// Initialize flavor must call first
   static Future<AppFlavor> initializeFlavor() {
@@ -96,7 +97,8 @@ class AppFlavorUtils {
   /// Retrieve flavor from scheme (iOS) or flavor (android)
   static Future<AppFlavor> getFlavor() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    if (packageInfo.packageName.contains(".dev")) {
+    _packageName = packageInfo.packageName;
+    if (_packageName.contains(".dev")) {
       _appFlavor = AppFlavor.development;
     } else if (packageInfo.packageName.contains(".staging")) {
       _appFlavor = AppFlavor.staging;
